@@ -69,6 +69,7 @@ git reflog
 ```
 I used reflog to locate the previous HEAD state and recover the lost commits.
 
+
 ![4](images/reflog-recovery4.png)
 
 
@@ -100,6 +101,7 @@ git rebase -i HEAD~5
 ### Editing Rebase Instructions
 
 ![2](images/interactive-rebase2.png)
+
 
 ### Clean Commit History After Rebase
 
