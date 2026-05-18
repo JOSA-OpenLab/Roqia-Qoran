@@ -45,7 +45,7 @@ I created multiple commits, then intentionally broke the branch using:
 git checkout -b reflog-practice
 ```
 
-![1](images/reflog-recovery1.png)
+![Creating Practice Branch](images/reflog-recovery1.png)
 
 
 
@@ -67,6 +67,7 @@ git reset --hard HEAD~2
 ```bash
 git reflog
 ```
+I used reflog to locate the previous HEAD state and recover the lost commits.
 
 ![4](images/reflog-recovery4.png)
 
@@ -100,7 +101,7 @@ git rebase -i HEAD~5
 
 ![2](images/interactive-rebase2.png)
 
-### After Rebase
+### Clean Commit History After Rebase
 
 ![3](images/interactive-rebase3.png)
 
