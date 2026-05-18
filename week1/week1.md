@@ -6,7 +6,7 @@ Before this, I mainly used Git to push projects to GitHub and collaborate with t
 
 ---
 
-## Walking Through Git Objects
+## Walking Through Git Objects ..
 
 ### Commit Object
 
