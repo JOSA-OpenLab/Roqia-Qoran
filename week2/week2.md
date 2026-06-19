@@ -2,19 +2,14 @@
 
 ## Two Well-Formed Pull Requests
 
-## Pull Request 1 - scalpel
+## Pull Request 1 - Quickstart Pages (_config.yml)
 
-Repository: tldr-pages/tldr
-
-PR:
-https://github.com/tldr-pages/tldr/pull/22631
-
-## Pull Request 2 - ewfmount
-
-Repository: tldr-pages/tldr
+Repository: github/docs
 
 PR:
-https://github.com/tldr-pages/tldr/pull/22632
+https://github.com/github/docs/pull/44821
+
+## Pull Request 2 - Pending
 
 ---
 
