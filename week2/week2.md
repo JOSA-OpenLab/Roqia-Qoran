@@ -9,7 +9,12 @@ Repository: github/docs
 PR:
 https://github.com/github/docs/pull/44821
 
-## Pull Request 2 - Pending
+## Pull Request 2 - (On-demand) deploy 
+
+Repository: withastro/docs
+
+PR:
+https://github.com/withastro/docs/pull/14099
 
 ---
 
