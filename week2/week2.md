@@ -9,7 +9,7 @@ Repository: github/docs
 PR:
 https://github.com/github/docs/pull/44821
 
-## Pull Request 2 - (On-demand) deploy 
+## Pull Request 2 - Arabic deploy tag translation 
 
 Repository: withastro/docs
 
