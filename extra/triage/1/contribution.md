@@ -10,8 +10,6 @@
 
 Verify whether the reported icon mapping issue is still present in the current implementation. 
 
----
-
 ## What I checked
 
 The verification focused on the current icon mapping implementation.
@@ -37,15 +35,29 @@ Changing the existing directional aliases may affect existing toolbar visuals. T
 
 ## Screenshots
 
+### Current icon mapping
+
+The current `arrow*` aliases map to chevron icons, while the corresponding arrow icons are exposed through the `arrow*alt` aliases.
+
 ![](images/01-current-mapping.png)
+
+### Exported arrow icons
+
+`@storybook/icons` exports the directional and diagonal arrow icons.
 
 ![](images/02-exported-arrow-icons.png)
 
+### Missing diagonal aliases
+
+No aliases were found for the diagonal arrow icons in `icon.tsx`.
+
 ![](images/03-no-diagonal-aliases.png)
 
-![](images/04-no-diagonal-icon-names.png)
+### Missing diagonal icon names
 
----
+No references to the exported diagonal arrow icon names were found in `icon.tsx`.
+
+![](images/04-no-diagonal-icon-names.png)
 
 ## Outcome
 A triage comment was posted with the verification results.
