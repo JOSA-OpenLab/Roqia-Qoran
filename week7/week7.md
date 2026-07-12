@@ -8,13 +8,13 @@ The goal of this task is to configure Dependabot to automatically monitor projec
 
 I added a Dependabot configuration for both Python dependencies (`pip`) and GitHub Actions.
 
-**Dependabot configuration:**  
-https://github.com/royy92/phishing-training-platform/blob/main/.github/dependabot.yml
+**Dependabot configuration:** 
+https://github.com/royy92/phishing-training-platform/blob/chore/dependabot-security/.github/dependabot.yml
 
 I also replaced every GitHub Action version tag inside the CI workflow with a full commit SHA.
 
 **Updated CI workflow:**  
-https://github.com/royy92/phishing-training-platform/blob/main/.github/workflows/ci.yml
+https://github.com/royy92/phishing-training-platform/blob/chore/dependabot-security/.github/workflows/ci.yml
 
 Pinning Actions by commit SHA prevents mutable tags from silently changing the executed code and follows the OpenSSF Scorecard recommendation.
 
