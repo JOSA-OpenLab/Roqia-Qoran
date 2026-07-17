@@ -230,6 +230,6 @@ The existing branch alias sanitization logic remains unchanged.
 
 ### Status
 
-I submitted a PR with the proposed security improvement. It is currently awaiting maintainer review.
+The proposed security improvement was accepted and merged.
 
 **PR:** https://github.com/withastro/docs/pull/14232
