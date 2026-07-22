@@ -91,7 +91,9 @@ The Big5 test cases failed, while the UTF-8 and Windows-1250 cases passed succes
 
 I then ran only the Big5-related tests:
 
+```bash
 python -m pytest -v tests/test_encoding.py -k "big5"
+```
 
 The result was:
 
