@@ -1,6 +1,33 @@
 # Week 8 - Performance, Profiling & Debugging
 
-## Task 1 - Profile and fix - Pending
+## Task 1 - Profile and fix 
+
+I chose the `pygments/pygments` repository for this task.
+
+I profiled the `WikitextLexer` using the large `article_france.wikitext` example already included in the repository.
+
+To understand where the execution time was spent, I used two profiling approaches:
+
+- `py-spy` to generate a flame graph.
+- Pygments' built-in `ProfilingRegexLexer` to determine whether a single regular expression was responsible for most of the runtime. The results showed that the execution time was distributed across many regex rules rather than one obvious bottleneck.
+
+I benchmarked the complete highlighting workflow by repeatedly calling:
+
+```python
+highlight(
+    text,
+    WikitextLexer(),
+    TerminalFormatter(),
+)
+```
+
+The benchmark averaged **955.8 ms** for the complete highlighting workflow on the 338,291-character test file.
+
+The flame graph identified `RegexLexer.get_tokens_unprocessed()` as the dominant application-level hotspot during highlighting.
+
+After reviewing the profiling results, I could not identify a small and obviously safe optimization. Since changing the regex order or matching behavior could affect tokenization correctness, I decided not to prepare a pull request.
+
+Instead, I opened an [Issue](https://github.com/pygments/pygments/issues/3240) in the Pygments repository summarizing my findings, including the benchmark results and the flame graph.
 
 ---
 
