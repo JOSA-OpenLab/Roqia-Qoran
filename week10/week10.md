@@ -1,4 +1,4 @@
-# Week 10 - Git Internals & Modern Workflow: Contribution Proposal
+# Week 10 - Pytest Contribution Proposal
 
 ## 1. The Project
 
