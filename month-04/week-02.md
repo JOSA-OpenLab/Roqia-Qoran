@@ -1,6 +1,6 @@
 ## pytest contributions
 
-This week, I continued working on pytest by investigating two issues. I plan to investigate a third issue next.
+This week, I continued working on pytest by investigating three issues. Two of these investigations progressed into implementations and pull requests.
 
 ### [Issue #13693](https://github.com/pytest-dev/pytest/issues/13693)
 
@@ -20,4 +20,14 @@ I validated the cause with a dynamic proxy that resolves the current `sys.stderr
 
 Applying this proxy approach automatically would require pytest to modify logging handlers created by the application embedding `pytest.main()`, which raises a design and ownership question. I also found that a regression test using `pytester.runpython()` would not exercise this path because the helper redirects child-process output to regular files instead of a Windows console. I posted my [findings](https://github.com/pytest-dev/pytest/issues/14289#issuecomment-5472116618) and asked whether the maintainers would prefer a targeted warning and documented workaround or automatic rebinding.
 
-### [Issue #6626](https://github.com/pytest-dev/pytest/issues/6626) — Pending
+Following the maintainers' feedback, I implemented the smaller warning-based approach and opened a [PR](https://github.com/pytest-dev/pytest/pull/14981). The change detects when `_windowsconsoleio_workaround()` replaces a standard stream while an existing `logging.StreamHandler` still references the previous stream object, and emits a targeted warning explaining that logging through the handler may fail with an invalid handle error. The implementation intentionally does not modify or rebind existing logging handlers.
+
+### [Issue #6626](https://github.com/pytest-dev/pytest/issues/6626)
+
+I investigated how parametrized test IDs interact with pytest's `-k` expression parser. Custom IDs can contain characters such as parentheses, commas, whitespace, or `=` that are valid in collected test IDs but have special meaning in `-k` expressions. As a result, a generated test case can be collected successfully while its ID cannot be used directly for selection with `-k`.
+
+After discussing the scope with the maintainer, I focused the initial change on **custom parametrization IDs**, leaving pytest's built-in generated IDs unchanged for separate consideration.
+
+I implemented `is_safe_identifier_part()` using pytest's existing `-k` expression scanner and added warnings for custom IDs that cannot be safely embedded in a `-k` identifier when they originate from `pytest.param(..., id=...)`, `ids=[...]`, callable-generated IDs, and `pytest_make_parametrize_id`. I also added tests, documentation, and a changelog entry for the new behavior.
+
+I opened [PR](https://github.com/pytest-dev/pytest/pull/14987) with the implementation.
