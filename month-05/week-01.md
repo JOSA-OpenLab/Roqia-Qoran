@@ -1,6 +1,6 @@
 ## OpenSSF Scorecard contributions
 
-This week, I worked on three issues from my Scorecard contribution proposal. For each issue, I reproduced the reported behavior and traced the relevant code path to determine where the problem originated.
+This week, I worked on three issues from my Scorecard contribution proposal and reviewed a PR. For each issue, I reproduced the reported behavior and traced the relevant code path to determine where the problem originated. I also tested the PR changes to understand and verify the issues I found.
 
 ### [Issue #5090](https://github.com/ossf/scorecard/issues/5090)
 
@@ -30,8 +30,20 @@ I reproduced the `10/10` score and traced the Vulnerabilities check to determine
 
 I tested the OSV API directly and found that it reports `CVE-2023-6026` and `CVE-2023-6027` for the commit tagged as `1.3.0`, but reports no vulnerabilities for the repository HEAD I tested. I traced the difference to the affected range in the OSV data, where both Git range boundaries resolve to the commit tagged as `1.3.0`.
 
-I also compared the relevant source between `1.3.0` and the tested HEAD and did not find a relevant fix, but I did not independently verify that the later commit is exploitable. Based on the investigation, I found no Scorecard-side bug: Scorecard checks the project commit, but OSV does not report the vulnerability for the tested HEAD.
+I then reproduced the reported arbitrary file-deletion behavior and tested the commits from `1.3.0` through the repository HEAD. The behavior reproduced on all 21 commits I tested. I also traced the relevant source history and did not find a source change in that range that addressed the behavior.
 
-I documented my [findings](https://github.com/ossf/scorecard/issues/3946#issuecomment-5672895088) and asked whether the affected range should be clarified upstream.
+As an additional check, I tested the application with `open_basedir` restricted to the application directory. In that configuration, PHP prevented deletion of the external test file, which showed that this restriction can limit the behavior at the environment level rather than representing a source-level fix.
 
-### [PR #5163](https://github.com/ossf/scorecard/pull/5163) — Pending
+Based on the investigation, I found no Scorecard-side issue. Scorecard checks the project commit, but the current OSV affected range only marks the `1.3.0` commit as affected, while I reproduced the reported behavior on all tested commits through HEAD.
+
+I documented my [findings](https://github.com/ossf/scorecard/issues/3946#issuecomment-5672895088) and asked whether the Scorecard issue should be closed and the affected range followed up upstream, or kept open pending clarification.
+
+### [PR #5163](https://github.com/ossf/scorecard/pull/5163)
+
+I reviewed a Scorecard PR that adds GitHub private vulnerability reporting as a signal in the Security-Policy check. I traced the new probe from the repository client through the raw check and evaluator, reviewed the client implementations and tests, and ran focused tests and a broader compile sweep.
+
+During the review, I found that changing the `testsRunInCI` import to a blank import breaks the `probes` package because `testsRunInCI.Run` is still referenced. I also found that adding `IsPrivateVulnerabilityReportingEnabled()` to the `RepoClient` interface leaves `clients/git.Client` without the new method, causing another compile failure.
+
+I also investigated how the check handles errors from the private vulnerability reporting API. An unexpected API error currently leaves the result unavailable, which the probe treats as `NotApplicable`. I verified this behavior with a runtime test and found that it can preserve the original `10/10` Security-Policy weighting, while a successful lookup showing private reporting as disabled results in a maximum score of `8/10`.
+
+I submitted a [code review](https://github.com/ossf/scorecard/pull/5163#pullrequestreview-5332981990) with these findings and suggested distinguishing unsupported private reporting from unexpected lookup errors.
