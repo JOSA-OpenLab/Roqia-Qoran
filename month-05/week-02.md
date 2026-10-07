@@ -41,7 +41,3 @@ The package tests passed with the race detector, and the final `make e2e-pat` ru
 I opened a [draft PR](https://github.com/ossf/scorecard/pull/5295) with the implementation and tests.
 
 ### [Issue #4036](https://github.com/ossf/scorecard/issues/4036) — Pending
-
-This issue reports that findings in test-data paths can affect the project score.
-
-I kept it as a pending triage opportunity. I have not started the investigation yet. The next step is to verify the current handling of test-data directories and determine whether the reported scoring behavior remains reproducible.
