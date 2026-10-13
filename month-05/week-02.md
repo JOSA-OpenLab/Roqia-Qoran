@@ -1,6 +1,6 @@
 ## OpenSSF Scorecard contributions
 
-This week, I worked on three issues from my Scorecard contribution proposal. I investigated the problems, made changes, and added tests to check them. One additional issue is still pending.
+This week, I worked on four issues from my Scorecard contribution proposal. I investigated the problems, made changes, and added tests to check them. The backup triage opportunity developed into an implementation, followed by an investigation of the broader exclusion request.
 
 ### [Issue #1174](https://github.com/ossf/scorecard/issues/1174)
 
@@ -40,4 +40,16 @@ The package tests passed with the race detector, and the final `make e2e-pat` ru
 
 I opened a [draft PR](https://github.com/ossf/scorecard/pull/5295) with the implementation and tests.
 
-### [Issue #4036](https://github.com/ossf/scorecard/issues/4036) — Pending
+### [Issue #4036](https://github.com/ossf/scorecard/issues/4036) — From triage to implementation
+
+I initially selected this issue as a backup triage opportunity. During the investigation, I confirmed that the shared file filter excluded lowercase `testdata` directories but did not recognize capitalization variants such as `testData`. I also found that OSV filesystem scanning ran independently and did not use this filter.
+
+The investigation developed into an implementation. I made test-data directory matching case-insensitive and added repository-scoped exclusions to OSV filesystem scans. I added regression tests for capitalization variants, nested directories, similarly named directories, and repositories beneath a `testdata` parent or whose root directory is named `testdata`. The tests verify that production binary-artifact and shell-script download findings remain reported, and that production packages remain queried by OSV.
+
+Package tests passed with the race detector on Linux, and the eight OSV capitalization and absolute/relative path subtests passed with the race detector on Windows before the upstream merge. After merging upstream main, I resolved a test-file conflict and prevented the scanner tests from overlapping a test that changes OSV's global logger. The three affected packages then passed with the race detector on Linux. I submitted the changes in [PR](https://github.com/ossf/scorecard/pull/5317).
+
+Before merging upstream main, I compared scans of the same clean IntelliJ Community checkout. Binary-Artifacts details decreased from 1,093 to 155, and Pinned-Dependencies details decreased from 135 to 54. After removing test-data entries from the baseline reports, the remaining details matched the modified reports after sorting. These counts include diagnostic messages, not solely scoring findings. Both check scores remained unchanged.
+
+I also investigated the broader exclusion request. Existing maintainer annotations provide check-level explanations and cause Scorecard to omit annotated checks' alerts from SARIF output. They do not change check scores or support path-specific exclusions. Custom path exclusions and findings that remain visible without affecting scoring were not implemented in this PR.
+
+I [asked](https://github.com/ossf/scorecard/issues/4036#issuecomment-6157563479) the maintainers whether repository-relative path exclusions for selected checks would be an appropriate direction for a separate follow-up, and whether there is an existing design or implementation to follow.
